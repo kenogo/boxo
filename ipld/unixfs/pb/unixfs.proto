@@ -23,6 +23,7 @@ message Data {
 	optional uint64 fanout = 6;
     optional uint32 mode = 7;
 	optional IPFSTimestamp mtime = 8;
+    optional bytes provenance = 9;
 }
 
 message Metadata {
