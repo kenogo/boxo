@@ -31,6 +31,7 @@ type DagBuilderHelper struct {
 	cidBuilder  cid.Builder
 	fileMode    os.FileMode
 	fileModTime time.Time
+	provenance  string
 
 	// Filestore support variables.
 	// ----------------------------
@@ -69,6 +70,9 @@ type DagBuilderParams struct {
 	// The unixfs last modified time
 	FileModTime time.Time
 
+	// W3C PROV data in JSON format
+	Provenance string
+
 	// NoCopy signals to the chunker that it should track fileinfo for
 	// filestore adds
 	NoCopy bool
@@ -85,6 +89,7 @@ func (dbp *DagBuilderParams) New(spl chunker.Splitter) (*DagBuilderHelper, error
 		maxlinks:    dbp.Maxlinks,
 		fileMode:    dbp.FileMode,
 		fileModTime: dbp.FileModTime,
+		provenance:  dbp.Provenance,
 	}
 	if fi, ok := spl.Reader().(files.FileInfo); dbp.NoCopy && ok {
 		db.fullPath = fi.AbsPath()
@@ -292,6 +297,7 @@ func (db *DagBuilderHelper) SetFileAttributes(n ipld.Node) error {
 		}
 		fsn.SetModTime(db.fileModTime)
 		fsn.SetMode(db.fileMode)
+		fsn.SetProvenance(db.provenance)
 
 		d, err := fsn.GetBytes()
 		if err != nil {
@@ -423,6 +429,11 @@ func (n *FSNodeOverDag) SetModTime(ts time.Time) {
 	n.file.SetModTime(ts)
 }
 
+// SetProvenance sets the W3C PROV data of `ft.FSNode`
+func (n *FSNodeOverDag) SetProvenance(provenance string) {
+	n.file.SetProvenance(provenance)
+}
+
 // Mode returns the file mode of the associated `ft.FSNode`
 func (n *FSNodeOverDag) Mode() os.FileMode {
 	return n.file.Mode()
@@ -431,6 +442,11 @@ func (n *FSNodeOverDag) Mode() os.FileMode {
 // ModTime returns the last modification time of the associated `ft.FSNode`
 func (n *FSNodeOverDag) ModTime() time.Time {
 	return n.file.ModTime()
+}
+
+// Provenance returns the W3C PROV data of `ft.FSNode`
+func (n *FSNodeOverDag) Provenance() string {
+	return n.file.Provenance()
 }
 
 // GetDagNode fills out the proper formatting for the FSNodeOverDag node
