@@ -281,10 +281,12 @@ func (db *DagBuilderHelper) Maxlinks() int {
 	return db.maxlinks
 }
 
-// HasFileAttributes will return false if Filestore is being used,
-// otherwise returns true if a file mode or last modification time is set.
+// HasFileAttributes will return false if Filestore is being used, otherwise
+// returns true if a file mode, last modification time, or provenance data is
+// set.
 func (db *DagBuilderHelper) HasFileAttributes() bool {
-	return db.fullPath == "" && (db.fileMode != 0 || !db.fileModTime.IsZero())
+	hasAttributes := db.fileMode != 0 || !db.fileModTime.IsZero() || db.provenance != ""
+	return db.fullPath == "" && hasAttributes
 }
 
 // SetFileAttributes stores file attributes present in the `DagBuilderHelper`
