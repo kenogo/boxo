@@ -460,12 +460,12 @@ func (n *FSNode) SetModTime(ts time.Time) {
 
 // Provenance returns the provenance data.
 func (n *FSNode) Provenance() string {
-	return string(n.format.GetProvenance())
+	return n.format.GetProvenance()
 }
 
 // SetProvenance stores the provenance data
 func (n *FSNode) SetProvenance(provenance string) {
-	n.format.Provenance = []byte(provenance)
+	n.format.Provenance = &provenance
 }
 
 // Metadata is used to store additional FSNode information.

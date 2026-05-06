@@ -99,7 +99,7 @@ type Data struct {
 	Fanout        *uint64                `protobuf:"varint,6,opt,name=fanout" json:"fanout,omitempty"`
 	Mode          *uint32                `protobuf:"varint,7,opt,name=mode" json:"mode,omitempty"`
 	Mtime         *IPFSTimestamp         `protobuf:"bytes,8,opt,name=mtime" json:"mtime,omitempty"`
-	Provenance    []byte                 `protobuf:"bytes,9,opt,name=provenance" json:"provenance,omitempty"`
+	Provenance    *string                `protobuf:"bytes,9,opt,name=provenance" json:"provenance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -190,11 +190,11 @@ func (x *Data) GetMtime() *IPFSTimestamp {
 	return nil
 }
 
-func (x *Data) GetProvenance() []byte {
-	if x != nil {
-		return x.Provenance
+func (x *Data) GetProvenance() string {
+	if x != nil && x.Provenance != nil {
+		return *x.Provenance
 	}
-	return nil
+	return ""
 }
 
 type Metadata struct {
@@ -319,7 +319,7 @@ const file_github_com_ipfs_boxo_ipld_unixfs_pb_unixfs_proto_rawDesc = "" +
 	"\x04mode\x18\a \x01(\rR\x04mode\x12=\n" +
 	"\x05mtime\x18\b \x01(\v2'.ipfs.boxo.ipld.unixfs.pb.IPFSTimestampR\x05mtime\x12\x1e\n" +
 	"\n" +
-	"provenance\x18\t \x01(\fR\n" +
+	"provenance\x18\t \x01(\tR\n" +
 	"provenance\"V\n" +
 	"\bDataType\x12\a\n" +
 	"\x03Raw\x10\x00\x12\r\n" +
